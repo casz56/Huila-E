@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Día Electoral Huila</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brand-logo" src="logo.jpeg" alt="Logo institucional" />
+        <div>
+          <h1>Día E Huila</h1>
+          <p>Mapa georreferenciado</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Filtros</h2>
+        <label class="field">
+          <span>Municipio</span>
+          <select id="municipioFilter"></select>
+        </label>
+
+        <label class="field">
+          <span>Territorio / comuna / corregimiento</span>
+          <select id="territorioFilter"></select>
+        </label>
+
+        <label class="field">
+          <span>Buscar puesto</span>
+          <input id="searchInput" type="text" placeholder="Ej. Garzón, INEM, Santa Librada..." />
+        </label>
+
+        <div class="actions">
+          <button id="resetBtn" class="btn btn-secondary">Restablecer</button>
+          <button id="fitBtn" class="btn btn-primary">Ajustar mapa</button>
+        </div>
+      </div>
+
+      <div class="panel compact">
+        <h2>Lectura rápida</h2>
+        <ul id="insightsList" class="insights"></ul>
+      </div>
+
+      <div class="panel compact note-box">
+        <h2>Mapa</h2>
+        <p>
+          Esta versión usa <strong>OpenStreetMap + Leaflet</strong>
+        </p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Aplicativo web</p>
+          <h2>Departamento del Huila</h2>
+        </div>
+        <div class="topbar-meta">
+          <span id="recordCountBadge" class="badge">0 puestos</span>
+        </div>
+      </header>
+
+      <section class="kpi-grid" id="kpiGrid"></section>
+
+      <section class="layout-grid">
+        <article class="card map-card">
+          <div class="card-header">
+            <div>
+              <h3>Mapa georreferenciado de puestos del Huila</h3>
+              <p>Visualización departamental por latitud y longitud de cada punto electoral</p>
+            </div>
+            <span class="status-dot">Activo</span>
+          </div>
+          <div id="map"></div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h3>Resumen por municipio</h3>
+              <p>Participación agregada por municipio</p>
+            </div>
+          </div>
+          <div id="comunaBars" class="bars-wrap"></div>
+        </article>
+      </section>
+
+      <section class="layout-grid bottom-grid">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h3>Top puestos por cédulas inscritas del Huila</h3>
+              <p>Comparativo de los puestos con mayor concentración</p>
+            </div>
+          </div>
+          <div id="topPuestos" class="bars-wrap small"></div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h3>Distribución por género</h3>
+              <p>Relación de mujeres y hombres inscritos</p>
+            </div>
+          </div>
+          <div class="gender-card">
+            <div class="donut-wrap">
+              <div id="genderDonut" class="donut">
+                <div class="donut-center">
+                  <strong id="donutTotal">0</strong>
+                  <span>Total</span>
+                </div>
+              </div>
+            </div>
+            <div id="genderLegend" class="legend"></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="card table-card">
+        <div class="card-header">
+          <div>
+            <h3>Detalle por puesto de votación del Huila</h3>
+            <p>Municipio, territorio, mesas, mujeres, hombres, total y localización</p>
+          </div>
+        </div>
+        <div class="table-tools">
+          <span id="tableMeta" class="muted"></span>
+          <button id="excelBtn" class="btn btn-primary excel-btn" type="button">Descargar Excel</button>
+        </div>
+        <div class="table-wrap">
+          <table id="tablaPuestos">
+            <thead>
+              <tr>
+                <th>Municipio</th>
+                <th>Puesto</th>
+                <th>Territorio</th>
+                <th>Dirección</th>
+                <th>Mesas</th>
+                <th>Mujeres</th>
+                <th>Hombres</th>
+                <th>Total</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
